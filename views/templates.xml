@@ -1,0 +1,44 @@
+<odoo>
+    <!--
+    This template iterates on all teachers (passed through
+    the template context) and prints each teacher in its own paragraph
+    -->
+    <template id="index">
+        <t t-call="website.layout">
+            <t t-set="title">Academy</t>
+            <div class="oe_structure">
+                <div class="container">
+                    <t t-foreach="teachers" t-as="teacher">
+                        <p><a t-attf-href="/academy/{{ slug(teacher) }}">
+                            <t t-esc="teacher.name"/>
+                        </a></p>
+                    </t>
+                </div>
+            </div>
+        </t>
+    </template>
+    <template id="biography">
+        <t t-call="website.layout">
+            <t t-set="title">Academy</t>
+            <div class="oe_structure"/>
+            <div class="oe_structure">
+                <div class="container">
+                    <p>
+                        <h3 t-field="person.name"/>
+                        <p>
+                            Last modified on:
+                            <i t-field="person.write_date" t-options='{"widget": "relative"}'/>
+                        </p>
+                        <div t-field="person.biography"/>
+                    </p>
+                </div>
+            </div>
+            <div class="oe_structure"/>
+        </t>
+    </template>
+    <template id="product_hide_no_price" inherit_id="website_sale.product_price">
+        <xpath expr="//h4/b" position="attributes">
+            <attribute name="t-if">product.price &gt; 0</attribute>
+        </xpath>
+    </template>
+</odoo>
