@@ -13,7 +13,6 @@ class Teacher(models.Model):
     course_ids = fields.One2many('product.template', 'teacher_id', string="Courses")
     major_ids = fields.Many2many('academy.major', string="Majors")
 
-
 class Course(models.Model):
     _inherit = 'product.template'
     _description = 'encapsulate courses information'
@@ -21,8 +20,7 @@ class Course(models.Model):
     name = fields.Char()
     teacher_id = fields.Many2one('academy.teacher', string="Teacher")
     major_ids = fields.Many2many('academy.major', string="Majors")
-
-
+    
 class Major(models.Model):
     _name = 'academy.major'
     _description = "encapsulate majors information"
