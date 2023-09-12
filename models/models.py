@@ -28,7 +28,16 @@ class Course(models.Model):
     
     teacher_id = fields.Many2one('academy.teacher', string="Teacher Name")
     major_ids = fields.Many2many('academy.major', string="Majors")
+    
+    name = fields.Char(string="Task No", required=True, copy=False)
 
+    @api.model   
+    def create(self, vals):
+        result = super(Course, self).create(vals)       
+        result['name'] = self.env['ir.sequence'].next_by_code(
+            'product.template')
+        return result
+    
     # @api.onchange('major_ids')
     # def _onchange_major_ids(self):
     #     teachers = self.env['academy.teacher'].search([('major_ids', 'in', self.major_ids.ids)])
@@ -48,7 +57,7 @@ class Course(models.Model):
     def _onchange_teacher_id(self):
         # 
         teachers = self.env['academy.teacher'].search([('major_ids', 'in', self.major_ids.ids)])
-        if self.teacher_id not in teachers:
+        if self.teacher_id and self.teacher_id not in teachers:
             warning = {
                 'title': "warning",
                 'message': "this is the warning message"
