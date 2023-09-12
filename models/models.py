@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api
+from odoo.exceptions import UserError
 import logging
 
 logger = logging.getLogger(__name__)
@@ -28,26 +29,35 @@ class Course(models.Model):
     teacher_id = fields.Many2one('academy.teacher', string="Teacher Name")
     major_ids = fields.Many2many('academy.major', string="Majors")
 
-    @api.onchange('major_ids')
+    # @api.onchange('major_ids')
+    # def _onchange_major_ids(self):
+    #     teachers = self.env['academy.teacher'].search([('major_ids', 'in', self.major_ids.ids)])
+    #     if self.major_ids.ids:
+    #         res = {
+    #             'domain':{
+    #                 'teacher_id':[(
+    #                     'id', 'in', teachers.ids,
+    #                 )]
+    #             }
+    #         }
+    #     else:
+    #         return
+    #     return res
+
+    @api.onchange('teacher_id')
     def _onchange_teacher_id(self):
+        # 
         teachers = self.env['academy.teacher'].search([('major_ids', 'in', self.major_ids.ids)])
-        logger.warning("============")
-        logger.warning(teachers.major_ids)
-        logger.warning(type(teachers.major_ids))
-        if self.major_ids.ids:
-            res = {
-                'domain':{
-                    'teacher_id':[(
-                        'id', 'in', teachers.ids,
-                    )]
-                }
+        if self.teacher_id not in teachers:
+            warning = {
+                'title': "warning",
+                'message': "this is the warning message"
             }
+            return {'warning': warning}
         else:
             return
-        return res
-        
+
 class Major(models.Model):
     _name = 'academy.major'
     _description = "encapsulate majors information"
-    
     name = fields.Char(string="Major Name")
