@@ -11,7 +11,7 @@
         </record>
 
         <record id="course0" model="product.template">
-            <field name="name">Course 0</field>
+            <field name="name">Course N</field>
             <field name="teacher_id" ref="padilla"/>
             <field name="public_categ_ids" eval="[(4, ref('academy.category_courses'), False)]"/>
             <field name="is_published">True</field>

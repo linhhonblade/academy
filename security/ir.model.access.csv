@@ -1,2 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_academy_teacher,academy.teacher,model_academy_teacher,,1,0,0,0
+access_academy_teacher,academy.teacher,model_academy_teacher,,1,1,1,1
+access_academy_major,academy.major,model_academy_major,,1,1,1,1
+
