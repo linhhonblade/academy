@@ -9,12 +9,8 @@ class Academy(http.Controller):
         return http.request.render('academy.index', {
             'teachers': teachers.search([]),
         })
-
-    @http.route('/academy/<model("academy.teacher"):teacher>/', auth='public', website=True)
-    def teacher(self, teacher):
-        return http.request.render('academy.biography', {'person': teacher})
     
     @http.route('/academy/<model("academy.teacher"):teacher>/', auth='public', website=True)
-    def course(self, teacher):
-        return http.request.render('academy.biography', {'person': teacher})
-
+    def teacher(self, teacher):
+        return http.request.render('academy.biography', {'person': teacher})  
+    

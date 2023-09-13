@@ -15,10 +15,6 @@ class Teacher(models.Model):
 
     course_ids = fields.One2many('product.template', 'teacher_id', string="Courses")
     major_ids = fields.Many2many('academy.major', string="Majors")
-    
-    @api.model
-    def _create(self, data_list):
-        return super()._create(data_list)
 
 class Course(models.Model):
     _inherit = 'product.template'
@@ -32,8 +28,6 @@ class Course(models.Model):
     @api.model
     def create(self, vals):
         vals['name'] = self.env['ir.sequence'].next_by_code('product.template')
-        logger.warning("------------------------------------")
-        logger.warning(vals)
         return super(Course, self).create(vals)
     
     @api.onchange('major_ids')
@@ -53,7 +47,6 @@ class Course(models.Model):
 
     @api.onchange('teacher_id')
     def _onchange_teacher_id(self):
-        # 
         teachers = self.env['academy.teacher'].search([('major_ids', 'in', self.major_ids.ids)])
         if self.teacher_id and self.teacher_id not in teachers:
             warning = {
