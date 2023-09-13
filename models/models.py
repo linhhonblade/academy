@@ -28,30 +28,30 @@ class Course(models.Model):
     
     teacher_id = fields.Many2one('academy.teacher', string="Teacher Name")
     major_ids = fields.Many2many('academy.major', string="Majors")
-    
-    name = fields.Char(string="Task No", required=True, copy=False)
 
-    @api.model   
+    name = fields.Char(string="Course Name", required=True)
+
+    @api.model
     def create(self, vals):
-        result = super(Course, self).create(vals)       
-        result['name'] = self.env['ir.sequence'].next_by_code(
-            'product.template')
-        return result
+        vals['name'] = self.env['ir.sequence'].next_by_code('product.template')
+        logger.warning("------------------------------------")
+        logger.warning(vals)
+        return super(Course, self).create(vals)
     
-    # @api.onchange('major_ids')
-    # def _onchange_major_ids(self):
-    #     teachers = self.env['academy.teacher'].search([('major_ids', 'in', self.major_ids.ids)])
-    #     if self.major_ids.ids:
-    #         res = {
-    #             'domain':{
-    #                 'teacher_id':[(
-    #                     'id', 'in', teachers.ids,
-    #                 )]
-    #             }
-    #         }
-    #     else:
-    #         return
-    #     return res
+    @api.onchange('major_ids')
+    def _onchange_major_ids(self):
+        teachers = self.env['academy.teacher'].search([('major_ids', 'in', self.major_ids.ids)])
+        if self.major_ids.ids:
+            res = {
+                'domain':{
+                    'teacher_id':[(
+                        'id', 'in', teachers.ids,
+                    )]
+                }
+            }
+        else:
+            return
+        return res
 
     @api.onchange('teacher_id')
     def _onchange_teacher_id(self):
