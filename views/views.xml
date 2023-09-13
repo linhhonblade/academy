@@ -63,7 +63,7 @@
     <field name="name">Course sequence</field>
     <field name="code">product.template</field>
     <field name="active">TRUE</field>
-    <field name="prefix">COUR</field>
+    <field name="prefix">COUR/%(year)s/</field>
     <field name="number_increment">1</field>
     <field name="number_next">1</field>
     <field name="padding">5</field>
