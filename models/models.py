@@ -23,10 +23,11 @@ class Teacher(models.Model):
 class Course(models.Model):
     _inherit = 'product.template'
     _description = 'encapsulate courses information'
+    name = fields.Char(string="Course Name")
+    
     teacher_id = fields.Many2one('academy.teacher', string="Teacher Name")
     major_ids = fields.Many2many('academy.major', string="Majors")
 
-    name = fields.Char(string="Course Name", required=True)
 
     @api.model
     def create(self, vals):
