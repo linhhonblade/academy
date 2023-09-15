@@ -20,9 +20,12 @@ class Course(models.Model):
     _inherit = 'product.template'
     _description = 'encapsulate courses information'
     ref = fields.Char(string="Course Code", readonly=True)
+    major_ids = fields.Many2many('academy.major', string="Majors")
+    
+    def _get_valid_teacher_id(self):
+        return [('id', 'in', self.env['academy.teacher'].search([('major_ids', 'in', self.major_ids.ids)]).ids)]
 
     teacher_id = fields.Many2one('academy.teacher', string="Teacher Name")
-    major_ids = fields.Many2many('academy.major', string="Majors")
 
     @api.model
     def create(self, vals):
