@@ -15,10 +15,13 @@
     <field name="name">Courses</field>
     <field name="res_model">product.template</field>
     <field name="view_mode">tree,form</field>
+    <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('academy_course_list')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('academy_course_form')})]"/>
   </record>
 
   <record id="academy_major_form" model="ir.ui.view">
-    <field name="name">Academy Major: Form</field>
+    <field name="name">academy.major.form</field>
     <field name="model">academy.major</field>
     <field name="arch" type="xml">
       <form>
@@ -32,27 +35,16 @@
   </record>
 
   <record id="academy_teacher_form" model="ir.ui.view">
-    <field name="name">Academy Teachers: Form</field>
+    <field name="name">academy.teacher.form</field>
     <field name="model">academy.teacher</field>
     <field name="arch" type="xml">
       <form>
         <sheet>
           <group>
             <field name="name"/>
-            <field name="biography"/>
-
-            <field name="major_ids">
-              <tree string="Majors" editable="bottom">
-                <field name="name"/>
-              </tree>
-            </field>
-
-            <field name="course_ids">
-              <tree string="Courses" editable="bottom">
-                <field name="name"/>
-                <field name="major_ids"/>
-              </tree>
-            </field>
+            <field name="biography"/> 
+            <field name="major_ids" widget="many2many_tags"/>
+            <field name="course_ids" widget="many2many_tags"/>
           </group>
         </sheet>
       </form>
@@ -60,7 +52,7 @@
   </record>
 
   <record id="course_name_sequence" model="ir.sequence">
-    <field name="name">Course sequence</field>
+    <field name="name">course.sequence</field>
     <field name="code">product.template</field>
     <field name="active">TRUE</field>
     <field name="prefix">COUR/%(year)s/</field>
@@ -70,23 +62,22 @@
   </record>
   
   <record id="academy_course_form" model="ir.ui.view">
-    <field name="name">Academy Courses: Form</field>
+    <field name="name">academy.course.form</field>
     <field name="model">product.template</field>
-    <field name="inherit_id" ref="product.product_template_only_form_view" />
+    <field name="inherit_id" ref=""/>
     <field name="arch" type="xml">
-        <!-- Add a new field -->
-        <xpath expr="//field[@name='name']" position="attributes">
-          <attribute name="invisible">1</attribute>
-          <attribute name="string"> </attribute>
-        </xpath>
-        <xpath expr="//field[@name='detailed_type']" position="after">
+    <form>
+      <sheet>
+        <group>
+          <field name="ref"/>
+          <field name="name"/>
           <field name="teacher_id"/>
-        </xpath>
-        <xpath expr="//field[@name='detailed_type']" position="before">
           <field name="major_ids" widget="many2many_tags"/>
-        </xpath>
+        </group>
+      </sheet>
+    </form>
     </field>
- </record>
+  </record>
 
  <!-- <record id="academy_course_search" model="ir.ui.view">
    <field name="name">Academy Courses: Search</field>
@@ -99,16 +90,19 @@
    </field>
  </record> -->
 
- <!-- <record id="academy_course_list" model="ir.ui.view">
-   <field name="name">Academy Courses: List</field>
-   <field name="model">academy.course</field>
+ <record id="academy_course_list" model="ir.ui.view">
+   <field name="name">academy.course.list</field>
+   <field name="model">product.template</field>
+   <field name="inherit_id" ref=""/>
    <field name="arch" type="xml">
      <tree string="Courses">
        <field name="name"/>
        <field name="teacher_id"/>
+       <field name="major_ids" widget="many2many_tags"/>
+       <field name="ref"/>
      </tree>
    </field>
- </record> -->
+ </record>
 
 
   <menuitem sequence="0" id="menu_academy" name="Academy"/>
