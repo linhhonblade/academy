@@ -26,7 +26,6 @@
     'data': [
         'security/ir.model.access.csv',
         'data/data.xml',
-        'data/course_sequence.xml',
         'views/views.xml',
         'views/templates.xml',
         'demo/demo.xml',
