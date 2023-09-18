@@ -19,15 +19,17 @@ class Teacher(models.Model):
 class Course(models.Model):
     _inherit = 'product.template'
     _description = 'encapsulate courses information'
-    name = fields.Char(string="Course Name")
-    
-    teacher_id = fields.Many2one('academy.teacher', string="Teacher Name")
+    ref = fields.Char(string="Course Code", readonly=True)
     major_ids = fields.Many2many('academy.major', string="Majors")
+    
+    def _get_valid_teacher_id(self):
+        return [('id', 'in', self.env['academy.teacher'].search([('major_ids', 'in', self.major_ids.ids)]).ids)]
 
+    teacher_id = fields.Many2one('academy.teacher', string="Teacher Name")
 
     @api.model
     def create(self, vals):
-        vals['name'] = self.env['ir.sequence'].next_by_code('product.template')
+        vals['ref'] = self.env['ir.sequence'].next_by_code('product.template')
         return super(Course, self).create(vals)
     
     @api.onchange('major_ids')
